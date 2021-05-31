@@ -1,55 +1,57 @@
-# hl_event_server
+# Лабораторная работа №1 #
 
-## install C++
-sudo apt-get install gcc g++ cmake git libssl-dev zlib1g-dev librdkafka-dev mysql-server mysql-client libmysqlclient-dev libboost-all-dev
+Выполнил: Воробьев Алексей, М8О-103М-20
 
-## install java
+## Сборка проекта ##
 
-sudo apt install openjdk-8-jdk
+```bash
+cmake configure .
+cmake .
+cmake --build ./
+```
 
-sudo apt install openjdk-8-jre
+## Настройка базы данных ##
 
-## install iginte
+1. Для создания тестового пользователя с именем laba и базы данных itlabs с необходимой таблицей Person необходимо выполнить команды из файла db_scripts/db_creation.sql.
+2. Скрипт заполнения базы данных сгенерированными записями (100 тысяч строк) записан в файле db_scripts/data_generation.sql.
 
-Download from https://ignite.apache.org/download.cgi#binaries
+Выполнение скрипта из файла:
 
-build platforms/cpp
+```bash
+source <имя файла>.sql;
+```
 
-## install CPPRDKafkfa
+## Запуск сервера ##
 
+Для запуска сервера следует выполнить команду:
 
-// https://github.com/edenhill/librdkafka
-https://github.com/mfontanini/cppkafka
-mkdir build
-cd build
-cmake <OPTIONS> ..
-make
-make install
+```bash
+sudo sh ./start.sh
+```
 
+Сервер работает на порту 8080.
 
-## Install poco
+## Тестирование с помощью gtest ##
 
-git clone -b master https://github.com/pocoproject/poco.git
+Запуск модульных тестов осуществляется командой:
 
-cd poco
+```bash
+./gtests
+```
 
-mkdir cmake-build
+## Тестирование с помощью wrk ##
 
-cd cmake-build
+Нагрузочное тестирование производилось для 1, 2, 6 и 10 потоков при 50 подключениях в течение 30 секунд.
 
-cmake ..
+```bash
+wrk -t 2 -c 50 -d 30s http://192.168.31.116:8080/person?login=585-20-1750
+```
 
-cmake --build . --config Release
+Полученные данные (Requests/sec - количество запросов в секунду, Latency(ms) - задержка в миллисекундах):
 
-sudo cmake --build . --target install
-
-## Install gtest
-sudo apt-get install libgtest-dev
-
-cd /usr/src/gtest/
-
-sudo cmake -DBUILD_SHARED_LIBS=ON
-
-sudo make
-
-sudo cp *.so /usr/lib
+Threads | Requests/sec | Latency(ms)
+---     | ---          | ---
+1       | 169.13       | 94.86
+2       | 93.24        | 87.64
+6       | 45.44        | 88.82
+10      | 44.55        | 90.84
