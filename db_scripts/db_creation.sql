@@ -1,7 +1,7 @@
-CREATE USER 'laba'@'localhost' IDENTIFIED BY 'super';
+CREATE USER 'lab'@'localhost' IDENTIFIED BY '12345';
 
 CREATE DATABASE itlabs;
-GRANT ALL PRIVILEGES ON itlabs.* TO 'laba'@'localhost';
+GRANT ALL PRIVILEGES ON itlabs.* TO 'lab'@'localhost';
 FLUSH PRIVILEGES;
 
 use itlabs;

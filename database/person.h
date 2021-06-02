@@ -35,10 +35,13 @@ namespace database
         static void init();
         static Person read_by_login(std::string login);
         static std::vector<Person> read_all();
-        static std::vector<Person> search(std::string first_name,std::string last_name);
+        static std::vector<Person> search(std::string first_name, std::string last_name);
         void save_to_mysql();
 
-
+        static void warm_up_cache();
+        static Person read_from_cache_by_login(std::string login);
+        void save_to_cache();
+        static size_t size_of_cache();
     };
 }
 
